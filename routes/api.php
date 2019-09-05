@@ -32,3 +32,8 @@ Route::get('/category', 'CategoryController@index')->middleware('auth:api');
 
 //Songs
 Route::get('/category/{id}', 'SongController@index')->middleware('auth:api');
+
+//Favorites
+Route::get('/favorite', 'FavoriteController@index')->middleware('auth:api');
+Route::post('/favorite/{id}', 'FavoriteController@create')->middleware('auth:api');
+Route::delete('/favorite/{id}', 'FavoriteController@destroy')->middleware('auth:api');

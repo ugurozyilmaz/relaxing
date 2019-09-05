@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Favorite;
+use App\Song;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class FavoriteController extends Controller
 {
@@ -14,7 +17,8 @@ class FavoriteController extends Controller
      */
     public function index()
     {
-        //
+        $favorites = Favorite::with('song')->paginate(5);
+        return responseJson(true, $favorites, 'Başarılı');
     }
 
     /**
@@ -22,15 +26,21 @@ class FavoriteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
+        $favorite = Song::where('id', $id)->first();
+
+        if (!$favorite)
+            return responseJson(false, null, 'Böyle Bir Favori Yok');
+
+        Favorite::firstOrCreate(['song_id' => $id, 'user_id' => Auth::user()->id]);
+        return responseJson(true, null, 'Başarılı');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,7 +51,7 @@ class FavoriteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Favorite  $favorite
+     * @param  \App\Favorite $favorite
      * @return \Illuminate\Http\Response
      */
     public function show(Favorite $favorite)
@@ -52,7 +62,7 @@ class FavoriteController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Favorite  $favorite
+     * @param  \App\Favorite $favorite
      * @return \Illuminate\Http\Response
      */
     public function edit(Favorite $favorite)
@@ -63,8 +73,8 @@ class FavoriteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Favorite  $favorite
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Favorite $favorite
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Favorite $favorite)
@@ -75,11 +85,18 @@ class FavoriteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Favorite  $favorite
+     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Favorite $favorite)
+    public function destroy($id)
     {
-        //
+        $favorite = Favorite::where('song_id', $id)->where('user_id', Auth::user()->id)->first();
+
+        if (!$favorite)
+            return responseJson(false, null, 'Böyle Bir Favori Yok');
+
+
+        $favorite->delete();
+        return responseJson(true, null, 'Favori Başarıyla Silindi');
     }
 }
