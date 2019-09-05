@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -35,5 +37,23 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+
+    public function login(Request $request)
+    {
+
+        if (Auth::once($request->only('email', 'password'))) {
+
+            $user = Auth::user();
+            $token = $user->createToken('RelaxingSounds');
+            $user->auth_token = $token->accessToken;
+
+            return responseJson(true, $user, 'Başarılı');
+
+        } else {
+            return responseJson(false, null, 'Email veya şifre hatalı');
+        }
+
     }
 }
