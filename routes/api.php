@@ -29,3 +29,6 @@ Route::post('/hello', 'HelloController@hello')->middleware('auth:api');
 
 //Categories
 Route::get('/category', 'CategoryController@index')->middleware('auth:api');
+
+//Songs
+Route::get('/category/{id}', 'SongController@index')->middleware('auth:api');
