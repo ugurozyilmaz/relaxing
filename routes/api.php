@@ -26,3 +26,6 @@ Route::namespace('Auth')->prefix('auth')->middleware([])->group(function () {
 
 //Hello
 Route::post('/hello', 'HelloController@hello')->middleware('auth:api');
+
+//Categories
+Route::get('/category', 'CategoryController@index')->middleware('auth:api');

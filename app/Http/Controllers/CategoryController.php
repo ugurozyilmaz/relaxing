@@ -14,7 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::paginate(5);
+        return responseJson(true, $categories, 'Başarılı');
     }
 
     /**
