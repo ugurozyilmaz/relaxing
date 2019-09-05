@@ -11,6 +11,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        for ($i=0; $i < 10; $i++) {
+            factory(App\Category::class)->create()->each(function ($u) {
+                for ($x=0; $x < 5; $x++) {
+                    factory(App\Song::class)->create(['category_id'=> $u->id]);
+                }
+            });;
+        }
     }
 }
