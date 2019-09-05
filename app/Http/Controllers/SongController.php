@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Song;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SongController extends Controller
 {
@@ -14,7 +16,10 @@ class SongController extends Controller
      */
     public function index($id)
     {
-        $songs = Song::where('category_id',$id)->paginate(15);
+        $songs = Song::where('category_id',$id)->
+        selectRaw("songs.*,(SELECT COUNT(id) FROM favorites WHERE favorites.song_id= songs.id AND favorites.user_id = ".Auth::user()->id.") as is_favorite")
+            ->paginate(15);
+
         return responseJson(true, $songs, 'Başarılı');
     }
 
