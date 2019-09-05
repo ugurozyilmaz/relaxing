@@ -23,3 +23,6 @@ Route::namespace('Auth')->prefix('auth')->middleware([])->group(function () {
     Route::post('/login', 'LoginController@login');
     Route::post('/reset', 'ForgotPasswordController@reset');
 });
+
+//Hello
+Route::post('/hello', 'HelloController@hello')->middleware('auth:api');
