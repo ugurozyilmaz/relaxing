@@ -5,7 +5,7 @@
 
 ```sh
 //Kurulum
-$ git pull https://github.com/ugurozyilmaz/relaxing_sounds.git
+$ git clone https://github.com/ugurozyilmaz/relaxing_sounds.git
 $ cd relaxing_sounds/laradock
 $ sudo /etc/init.d/apache2 stop (80 portu doluysa) 
 $ sudo docker-compose up ngnix mysql
